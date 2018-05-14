@@ -12,6 +12,10 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
+	<context-param>
+		<param-name>applicationName</param-name>
+		<param-value>MyApplicationName</param-value>		
+	</context-param>
 	<servlet>
 		<servlet-name>Servlet13</servlet-name>
 		<servlet-class>pl.coderslab.Servlet13</servlet-class>
@@ -20,5 +24,17 @@
 	<servlet-mapping>
 		<servlet-name>Servlet13</servlet-name>
 		<url-pattern>/Servlet13</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Servlet22</servlet-name>
+		<servlet-class>pl.coderslab.Servlet22</servlet-class>
+		<init-param>
+		<param-name>myParam</param-name>
+		<param-value>coderslab.pl</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Servlet22</servlet-name>
+		<url-pattern>/Servlet22</url-pattern>
 	</servlet-mapping>
 </web-app>
