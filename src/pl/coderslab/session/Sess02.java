@@ -25,7 +25,7 @@ public class Sess02 extends HttpServlet {
 		if (httpSession.isNew()) {
 			List<Integer> numbers = new ArrayList<>();
 			httpSession.setAttribute("notesArray", numbers);
-		} 		
+		}
 		resp.getWriter().append(htmStart).append(form).append(htmlEnd);
 	}
 
@@ -33,27 +33,36 @@ public class Sess02 extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession httpSession = req.getSession();
 		String note = req.getParameter("note");
-		int noteToAdd = Integer.parseInt(note);
-		String notesToPrint = "";
-		int sum =0;
-		double avearge = 0;
-		int counter = 0;
-		List<Integer> numbers = (List<Integer>) httpSession.getAttribute("notesArray");
-		if (noteToAdd >=1 && noteToAdd <=6) {
-			numbers.add(noteToAdd);
+		int noteToAdd;
+		try {
+			noteToAdd = Integer.parseInt(note);
+			String notesToPrint = "";
+			int sum = 0;
+			double avearge = 0;
+			int counter = 0;
+			List<Integer> numbers = (List<Integer>) httpSession.getAttribute("notesArray");
+			if (noteToAdd >= 1 && noteToAdd <= 6) {
+				numbers.add(noteToAdd);
+			}
+			httpSession.setAttribute("notesArray", numbers);
+			for (Integer integer : numbers) {
+				notesToPrint += integer + " ";
+				sum += integer;
+				counter++;
+			}
+			if (counter > 0) {
+				avearge = sum / counter;
+				
+			}
+			doGet(req, resp);
+			resp.getWriter().append("<h1>").append(numbers.toString()).append(" Średnia to " + avearge).append("</h1>");
+
+		} catch (NumberFormatException e) {
+			
+			resp.getWriter().append("Błędny format danych");
 		}
-		httpSession.setAttribute("notesArray", numbers);
-		for (Integer integer : numbers) {
-			notesToPrint += integer+" ";
-			sum += integer; 
-			counter++;
-		}
-		avearge = sum/counter;
-		doGet(req, resp);
-		resp.getWriter().append("<h1>").append(numbers.toString()).append(" Średnia to "+avearge).append("</h1>");
-		
-	
-}
+
+	}
 }
 // #### Zadanie 2 - rozwiązywane z wykładowcą
 //
