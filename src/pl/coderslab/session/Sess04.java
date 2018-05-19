@@ -1,22 +1,61 @@
 package pl.coderslab.session;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/Sess04")
 public class Sess04 extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+		HttpSession httpSession = req.getSession();
+		String result = "";
+		
+		if (httpSession.isNew()) {
+			ArrayList<Sess04Product> productList = new ArrayList<>();
+			httpSession.setAttribute("productList", productList);
+			result = "Brak produktów na lisce";
+		} else {
+			double totalSum =0;
+			ArrayList<Sess04Product> productList = (ArrayList<Sess04Product>) httpSession.getAttribute("productList");
+			for (Sess04Product sess04Product : productList) {
+				result += sess04Product.toString()+ "\n";
+				totalSum+=sess04Product.getTotalPrice();
+			}
+			result += "SUMA TO : "+totalSum;
+		}
+			resp.getWriter().append(result);
+		
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession httpSession = req.getSession();
+		String product = req.getParameter("product_name");
+		String quantityString = req.getParameter("quantity");
+		String priceString = req.getParameter("price");
+		if (httpSession.isNew()) {
+			ArrayList<Sess04Product> productList = new ArrayList<>();
+			httpSession.setAttribute("productList", productList);
+		}
+		try {
+			ArrayList<Sess04Product> productList = (ArrayList<Sess04Product>) httpSession.getAttribute("productList");
+			int quantity = Integer.parseInt(quantityString);
+			double price = Double.parseDouble(priceString);
+			if (quantity > 0 && price > 0) {
+				Sess04Product prod = new Sess04Product(product, quantity, price);
+				productList.add(prod);
+			}
+			doGet(req, resp);
+		} catch (NullPointerException e) {
+			doGet(req, resp);
+		}
 
 	}
 
