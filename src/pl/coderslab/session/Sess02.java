@@ -54,8 +54,8 @@ public class Sess02 extends HttpServlet {
 				avearge = sum / counter;
 				
 			}
-			doGet(req, resp);
 			resp.getWriter().append("<h1>").append(numbers.toString()).append(" Średnia to " + avearge).append("</h1>");
+			doGet(req, resp);
 
 		} catch (NumberFormatException e) {
 			
